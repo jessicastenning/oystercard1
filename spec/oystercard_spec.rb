@@ -18,14 +18,6 @@ describe Oystercard do
     end
   end
 
-  describe '#deduct' do
-    it 'should deduct the cost of the journey from the card balance' do
-      subject.top_up(10)
-      subject.deduct(5)
-      expect(subject.balance).to eq 5
-    end
-  end
-
   describe '#in_journey?' do
     it 'should return false by default' do
       expect(subject.in_journey).to eq false
@@ -49,6 +41,11 @@ describe Oystercard do
       subject.touch_in
       subject.touch_out
       expect(subject.in_journey).to eq false
+    end
+    it 'should reduce card balance by the minimum fare' do
+      subject.top_up(10)
+      subject.touch_in
+      expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUM_BALANCE)
     end
   end
 end

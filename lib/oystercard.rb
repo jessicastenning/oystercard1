@@ -15,17 +15,20 @@ MINIMUM_BALANCE = 1
     @balance += cash
   end
 
-  def deduct(fare=5)
-    @balance -= fare
-  end
-
   def touch_in
     fail "balance too low, the minimum balance is £#{MINIMUM_BALANCE}" if @balance < 1
     @in_journey = true
   end
 
   def touch_out
+    deduct(MINIMUM_BALANCE)
     @in_journey = false
+  end
+
+  private
+
+  def deduct(fare=5)
+    @balance -= fare
   end
 
 end
