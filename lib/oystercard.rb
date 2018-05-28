@@ -13,4 +13,8 @@ MAXIMUM_BALANCE = 90
     @balance += cash
   end
 
+  def deduct(fare=5)
+    @balance -= fare
+  end
+
 end
