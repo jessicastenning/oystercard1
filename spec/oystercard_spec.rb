@@ -34,13 +34,18 @@ describe Oystercard do
 
   describe '#touch_in' do
     it 'should change the in_journey status to true' do
+      subject.top_up(10)
       subject.touch_in
       expect(subject.in_journey).to eq true
+    end
+    it 'shouldnt allow you to touch in if you unless you have the minimum balance' do
+      expect{ subject.touch_in }.to raise_error "balance too low, the minimum balance is £#{Oystercard::MINIMUM_BALANCE}"
     end
   end
 
   describe '#touch_out' do
     it 'should change the in_journey status to false' do
+      subject.top_up(10)
       subject.touch_in
       subject.touch_out
       expect(subject.in_journey).to eq false
