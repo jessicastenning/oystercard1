@@ -9,8 +9,8 @@ MAXIMUM_BALANCE = 90
   end
 
   def top_up(cash)
-    fail "balance cannot exceed #{MAXIMUM_BALANCE}" if @balance =+ cash > MAXIMUM_BALANCE 
-    @balance =+ cash
+    fail "balance cannot exceed #{MAXIMUM_BALANCE}" if @balance + cash > MAXIMUM_BALANCE
+    @balance += cash
   end
 
 end
