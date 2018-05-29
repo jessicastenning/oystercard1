@@ -1,6 +1,7 @@
 require 'oystercard'
 
 describe Oystercard do
+let(:station){ double :station }
 
   describe '#balance' do
     it 'should have a default balance of zero' do
@@ -20,32 +21,43 @@ describe Oystercard do
 
   describe '#in_journey?' do
     it 'should return false by default' do
-      expect(subject.in_journey).to eq false
+      expect(subject.in_journey?).to eq false
     end
   end
 
   describe '#touch_in' do
     it 'should change the in_journey status to true' do
       subject.top_up(10)
-      subject.touch_in
-      expect(subject.in_journey).to eq true
+      subject.touch_in(station)
+      expect(subject.in_journey?).to eq true
     end
     it 'shouldnt allow you to touch in if you unless you have the minimum balance' do
-      expect{ subject.touch_in }.to raise_error "balance too low, the minimum balance is £#{Oystercard::MINIMUM_BALANCE}"
+      expect{ subject.touch_in(station) }.to raise_error "balance too low, the minimum balance is £#{Oystercard::MINIMUM_BALANCE}"
+    end
+    it 'should record the entry station on touch_in' do
+      subject.top_up(10)
+      subject.touch_in(station)
+      expect(subject.entry_station).to eq station
     end
   end
 
   describe '#touch_out' do
     it 'should change the in_journey status to false' do
       subject.top_up(10)
-      subject.touch_in
+      subject.touch_in(station)
       subject.touch_out
-      expect(subject.in_journey).to eq false
+      expect(subject.in_journey?).to eq false
     end
     it 'should reduce card balance by the minimum fare' do
       subject.top_up(10)
-      subject.touch_in
+      subject.touch_in(station)
       expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUM_BALANCE)
+    end
+    it 'should set the entry station to nil on touch_out' do
+      subject.top_up(10)
+      subject.touch_in(station)
+      subject.touch_out
+      expect(subject.entry_station).to eq nil
     end
   end
 end
