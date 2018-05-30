@@ -1,4 +1,5 @@
 require_relative './station'
+require_relative './journey'
 
 class Oystercard
 
@@ -47,8 +48,8 @@ MINIMUM_BALANCE = 1
   end
 
   def reset_journey
-    @current_journey = {}
-    @entry_station = nil
-  end
+        @current_journey = {}
+        @entry_station = nil
+      end
 
 end
